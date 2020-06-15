@@ -17,8 +17,6 @@ public class Decoder {
     private int[] decrypt(int[] arr) {
         int indexFirstFixedCube = -1;
         int indexSecondFixedCube = -1;
-        int firstFixedNum;
-        int secondFixedNum;
 
         // находим индексы для установленных кубиков
         for (int i = 0; i < arr.length; i++) {
@@ -31,27 +29,14 @@ public class Decoder {
             }
         }
 
-        // Инициализация фиксированных значений
-        firstFixedNum = arr[indexFirstFixedCube];
-        secondFixedNum = arr[indexSecondFixedCube];
-
-        /*
-        Заполняем первые три числа кода открытия двери чтобы дальше можно было
-        считать последовательность
-         */
+        // Заполняем первые три значения последовательности
         int firstIndex = indexFirstFixedCube % 3;
         int secondIndex = indexSecondFixedCube % 3;
-
-        if (firstIndex == secondIndex) {
-            // Последовательность нельзя решить
-            return null;
-        }
-
         int thirdIndex = 3 - firstIndex - secondIndex;
 
-        arr[firstIndex] = firstFixedNum;
-        arr[secondIndex] = secondFixedNum;
-        arr[thirdIndex] = 10 - firstFixedNum - secondFixedNum;
+        arr[firstIndex] = arr[indexFirstFixedCube];
+        arr[secondIndex] = arr[indexSecondFixedCube];
+        arr[thirdIndex] = 10 - arr[indexFirstFixedCube] - arr[indexSecondFixedCube];
 
         // Проверяем каждые три числа по порядку, и дописываем значение
         for (int i = 1; i < arr.length - 2; i++) {
@@ -66,18 +51,24 @@ public class Decoder {
         }
 
         // Проверка на валидность
+        if (checkCode(arr)) {
+            return arr;
+        } else {
+            return null;
+        }
+    }
+
+    private boolean checkCode(int[] arr) {
         for (int i = 0; i < arr.length - 2; i++) {
             int firstNum = arr[i];
             int secondNum = arr[i + 1];
             int thirdNum = arr[i + 2];
             int sum = firstNum + secondNum + thirdNum;
 
-            if (sum != 10) {
-                return null;
+            if (firstNum <= 0 || secondNum <= 0 || thirdNum <= 0 || sum != 10) {
+                return false;
             }
         }
-
-        return arr;
+        return true;
     }
-
 }
