@@ -18,7 +18,7 @@ public class Decoder {
         int indexFirstFixedCube = -1;
         int indexSecondFixedCube = -1;
 
-        // находим индексы для установленных кубиков
+        // находим индексы уже установленных кубиков
         for (int i = 0; i < arr.length; i++) {
             if (arr[i] != 0) {
                 if (indexFirstFixedCube != -1) {
@@ -32,6 +32,12 @@ public class Decoder {
         // Заполняем первые три значения последовательности
         int firstIndex = indexFirstFixedCube % 3;
         int secondIndex = indexSecondFixedCube % 3;
+
+        // Если индексы первого и второго числа совпадают, меняем индекс второго
+        if (firstIndex == secondIndex) {
+            secondIndex = firstIndex == 0? 1: 0;
+        }
+
         int thirdIndex = 3 - firstIndex - secondIndex;
 
         arr[firstIndex] = arr[indexFirstFixedCube];
